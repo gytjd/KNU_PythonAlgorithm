@@ -13,10 +13,7 @@ count=0
 
 while count<M:
     if(ary[k]!=ary[k+1]):
-        for j in range(K):
-            if(count>=M):
-                break;
-            
+        for j in range(K or count<=M):
             sum+=ary[k]
             count+=1
         if(count>=M):
@@ -24,15 +21,10 @@ while count<M:
         sum+=ary[k+1]
         count+=1
     else:
-        for j in range(K):
-            if(count>=M):
-                break;
-            
+        for j in range(K or count<=M):        
             sum+=ary[k]
             count+=1
-        for j in range(k):
-            if(count>=M):
-                break;
+        for j in range(K or count<=M):
             sum+=ary[k+1]
             count+=1
         
