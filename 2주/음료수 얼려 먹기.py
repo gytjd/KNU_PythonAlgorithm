@@ -8,7 +8,7 @@ for i in range(N):
 move = [[0 for j in range(2) for i in range(4)]]
 move=[[-1,0],[0,-1],[1,0],[0,1]]
 
-def dfs(i,j):
+def count_ice(i,j):
     
     if i<=-1 or i>=N or j<=-1 or j>=M:
         return
@@ -19,7 +19,7 @@ def dfs(i,j):
             graph[i][j]=1;
                  
             for x in range(4):
-                dfs(move[x][0]+i,move[x][1]+j)
+                count_ice(move[x][0]+i,move[x][1]+j)
             
             return True
         else:
@@ -33,7 +33,7 @@ result=0
 for i in range(N):
     for j in range(M):
         
-        if dfs(i,j)==True:
+        if count_ice(i,j)==True:
             result+=1
 
 print(result)
