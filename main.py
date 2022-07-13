@@ -1,24 +1,36 @@
-a = input()
-count = 0
+import sys
+from itertools import combinations
 
-for i in range(0, len(a)):
-    if a[i] == 'A' or a[i] == 'B' or a[i] == 'C':
-        count += 3
-    elif a[i] == 'D' or a[i] == 'E' or a[i] == 'F':
-        count += 4
-    elif a[i] == 'G' or a[i] == 'H' or a[i] == 'I':
-        count += 5
-    elif a[i] == 'J' or a[i] == 'K' or a[i] == 'L':
-        count += 6
-    elif a[i] == 'M' or a[i] == 'N' or a[i] == 'O':
-        count += 7
-    elif a[i] == 'P' or a[i] == 'Q' or a[i] == 'R' or a[i] == 'S':
-        count += 8
-    elif a[i] == 'T' or a[i] == 'U' or a[i] == 'V':
-        count += 9
-    elif a[i] == 'W' or a[i] == 'X' or a[i] == 'Y' or a[i] == 'Z':
-        count += 10
-    else:
-        count += 11
+n = int(input())
 
-print(count)
+result=list()
+
+for _ in range(n):
+    result.append(list(map(int,sys.stdin.readline().split())))
+
+
+temp = [i for i in range(1, n + 1)]
+temp = list(combinations(temp, n // 2))
+
+
+sum=100
+
+for i in range(len(temp) // 2):
+    j = i
+    k = len(temp) - i - 1
+
+    tempStart = 0
+    tempLink = 0
+
+    for startA in temp[j]:
+        for startB in temp[j]:
+            tempStart+=result[startA-1][startB-1]
+
+    for linkA in temp[k]:
+        for linkB in temp[k]:
+            tempLink+=result[linkA-1][linkB-1]
+
+    sum=min(sum,abs(tempStart-tempLink))
+
+
+print(sum)
