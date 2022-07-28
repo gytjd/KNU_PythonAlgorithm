@@ -42,6 +42,8 @@ def all_sdoku():
     return 1
 
 def complete_sdoku(zero_count):
+
+    display_sdoku()
     if all_sdoku()==len(temp_zero):
         display_sdoku()
         return
