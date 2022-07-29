@@ -1,36 +1,30 @@
 import sys
+from collections import deque
 
-n=int(input())
-array=list(map(int,sys.stdin.readline().split()))
-result=list()
+n,m=map(int,sys.stdin.readline().split())
+graph=list()
+dir=[[-1,0],[1,0],[0,-1],[0,1]]
 
-s=0
-def subset(idx,a):
-    if idx>=n:
-        return
+for _ in range(n):
+    graph.append(list(sys.stdin.readline().rstrip()))
 
-    print(idx,a)
+alpha=set()
+alpha.add(graph[0][0])
+ans=0
+
+def dfs_recur(x,y,count):
+    global ans
+    ans=max(ans,count)
+
+    for i in range(4):
+        dx=x+dir[i][0]
+        dy=y+dir[i][1]
+
+        if dx>=0 and dx<n and dy>=0 and dy<m and graph[dx][dy] not in alpha:
+            alpha.add(graph[dx][dy])
+            dfs_recur(dx,dy,count+1)
+            alpha.remove(graph[dx][dy])
 
 
-    a+=array[idx]
-    result.append(a)
-
-    subset(idx+1,a)
-    subset(idx+1,a-array[idx])
-
-
-subset(0,0)
-max_num=max(result)
-result.sort()
-result=set(result)
-
-resultB=set()
-for i in range(1,max_num+1):
-    resultB.add(i)
-
-temp_result=resultB-result
-
-if temp_result:
-    print(min(temp_result))
-else:
-    print(max_num+1)
+dfs_recur(0,0,1)
+print(ans)
