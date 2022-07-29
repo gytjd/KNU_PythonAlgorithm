@@ -1,31 +1,34 @@
 import sys
-from itertools import combinations
 
 n=int(input())
 array=list(map(int,sys.stdin.readline().split()))
 result=list()
 
-for i in range(1,n+1):
-    result.append(combinations(array,i))
+s=0
+def subset(idx,a):
+    if idx>=n:
+        return
 
-tempA=list()
-for i in result:
-    for j in i:
-        tempA.append(sum(j))
 
-tempA.sort()
-tempA=set(tempA)
-max_temp=max(tempA)
+    a+=array[idx]
+    result.append(a)
 
-tempB=set()
-for i in range(1,max_temp+1):
-    tempB.add(i)
+    subset(idx+1,a)
+    subset(idx+1,a-array[idx])
 
-temp_result=tempB-tempA
 
-if len(temp_result)==0:
-    print(max_temp+1)
-else:
+subset(0,0)
+max_num=max(result)
+result.sort()
+result=set(result)
+
+resultB=set()
+for i in range(1,max_num+1):
+    resultB.add(i)
+
+temp_result=resultB-result
+
+if temp_result:
     print(min(temp_result))
-
-
+else:
+    print(max_num+1)
