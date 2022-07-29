@@ -9,6 +9,8 @@ def subset(idx,a):
     if idx>=n:
         return
 
+    print(idx,a)
+
 
     a+=array[idx]
     result.append(a)
