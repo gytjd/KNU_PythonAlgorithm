@@ -1,64 +1,38 @@
 import sys
 from collections import deque
 
-dir=[[0,1],[1,0],[0,-1],[-1,0]]
+input = sys.stdin.readline
 
-n=int(sys.stdin.readline())
-mapGraph=[list(sys.stdin.readline().rstrip()) for i in range(n)]
+N,M = map(int,input().split())
+graph = [list(map(int,input().rstrip())) for _ in range(N)]
+visited = [[[0]*2 for _ in range(M)] for _ in range(N)]    #각 층마다 방문여부 저장 리스트
+queue = deque()
 
-visited=[[0 for i in range(n)]for i in range(n)]
-RGvisited=[[0 for i in range(n)]for i in range(n)]
+dr = [-1,1,0,0]    #상하좌우
+dc = [0,0,-1,1]
 
-
-def BFS_iter(x,y):
-    queue = deque()
-    queue.append((x,y))
+def bfs(x,y,z):
+    queue.append([x,y,z])
+    visited[x][y][z] = 1    #시작점 포함이므로 1
     while queue:
-        dx,dy=queue.popleft()
+        X,Y,Z = queue.popleft()
+
+        if X == N-1 and Y == M-1:    #도착시에 print -> exit
+            print(visited[X][Y][Z])
+            exit(0)
 
         for i in range(4):
-            nx=dx+dir[i][0]
-            ny=dy+dir[i][1]
-
-            if nx >= 0 and nx < n and ny >= 0 and ny < n:
-                if mapGraph[dx][dy] == "R" or mapGraph[dx][dy] == "G":
-                    if visited[nx][ny] == 0 and (mapGraph[nx][ny] == "R" or mapGraph[nx][ny] == "G"):
-                        visited[nx][ny] = 1
-                        queue.append((nx, ny))
-
-                elif mapGraph[dx][dy] == "B":
-                    if visited[nx][ny] == 0 and mapGraph[nx][ny] == "B":
-                        visited[nx][ny] = 1
-                        queue.append((nx, ny))
-    return 1
-
-
-def BFS_normal(x,y):
-    queue = deque()
-    queue.append((x,y))
-    while queue:
-        dx,dy=queue.popleft()
-
-        for i in range(4):
-            nx=dx+dir[i][0]
-            ny=dy+dir[i][1]
-
-            if nx>=0 and nx<n and ny>=0 and ny<n:
-                if mapGraph[dx][dy] == mapGraph[nx][ny]:
-                    if RGvisited[nx][ny] == 0:
-                        RGvisited[nx][ny] = 1
-                        queue.append((nx, ny))
-    return 1
-
-rgcount=0
-count=0
-for i in range(n):
-    for j in range(n):
-        if visited[i][j]==0 and BFS_iter(i,j)==1:
-            visited[i][j]=1
-            count+=1
-        if RGvisited[i][j]==0 and BFS_normal(i,j)==1:
-            RGvisited[i][j]=1
-            rgcount+=1
-
-print(rgcount,count)
+            NX = X+dr[i]
+            NY = Y+dc[i]
+            #범위안에있고
+            if 0<=NX<N and 0<=NY<M:
+                #벽이 아니고 방문한적이 없다면
+                if graph[NX][NY] == 0 and visited[NX][NY][Z] == 0:
+                    visited[NX][NY][Z] = visited[X][Y][Z] + 1
+                    queue.append([NX,NY,Z])
+                #벽이고 부술 수 있는 횟수가 남아있고 부순후에 지점을 방문한적이 없다면
+                elif Z > 0 and visited[NX][NY][Z-1] == 0:
+                    visited[NX][NY][Z-1] = visited[X][Y][Z] + 1    #부순 후 레이어에 방문횟수 증감
+                    queue.append([NX,NY,Z-1])    #부순 레이어로 이동 -> (Z-1)
+bfs(0,0,1)    #시작 x, 시작 y, 부술 수 있는 횟수
+print(-1)
