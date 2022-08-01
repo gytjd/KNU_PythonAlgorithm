@@ -1,24 +1,35 @@
 import sys
+from collections import deque
 
 n=int(input())
-array=list(map(int,sys.stdin.readline().split()))
-result=list()
 
-def subset(idx):
-    if len(array)==2:
-        result.append(idx)
-        return
+mapGraph=[[0 for i in range(n)]for i in range(n)]
+visited=[[0 for i in range(n)]for i in range(n)]
+dir=[[-2,-1],[-2,+1],[0,-2],[0,+2],[+2,-1],[+2,+1]]
 
-    for i in range(1,len(array)-1):
-        a=array[i-1]*array[i+1]
-        temp=array[i]
-        del array[i]
-        subset(idx+a)
-        array.insert(i,temp)
+r1,c1,r2,c2=map(int,sys.stdin.readline().split())
+queue=deque()
+visited[r1][c1]=1
+queue.append((r1,c1))
+mapGraph[r1][c1]=0
 
+while queue:
+    x,y=queue.popleft()
 
+    if x==r2 and y==c2:
+        print(mapGraph[x][y])
+        break
 
-subset(0)
-print(result)
+    for i in range(6):
+        dx=x+dir[i][0]
+        dy=y+dir[i][1]
 
+        if dx<0 or dx>=n or dy<0 or dy>=n:
+            continue
 
+        if visited[dx][dy]==0:
+            queue.append((dx,dy))
+            visited[dx][dy]=1
+            mapGraph[dx][dy]=mapGraph[x][y]+1
+else:
+    print(-1)
