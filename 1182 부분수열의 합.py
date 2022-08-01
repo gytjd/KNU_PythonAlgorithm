@@ -10,7 +10,6 @@ for i in range(1,n+1):
 
 count=0
 
-
 for i in result:
     for j in i:
         if sum(j)==s:
